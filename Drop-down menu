@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event</title>
+    <style type="text/css">
+        body, ul, li {
+            margin: 0; padding: 0;
+            font-size: 16px;
+        }
+        ul, li {
+            list-style: none;
+        }
+        #divselect {
+            width: 186px;
+            margin: 80px auto;
+            position: relative;
+            z-index: 10000;
+        }
+        #divselect cite {
+            width: 150px;
+            height: 24px;
+            line-height: 24px;
+            padding-left: 4px;
+            padding-right: 30px;
+            border: 1px solid #333;
+            background: url('images/ptlogin.png') no-repeat 175px -14px; 
+            color: #807a62;
+            cursor: pointer;
+            font-style: normal;
+            display: block;
+        }
+        #divselect ul {
+            width: 184px;
+            background: #fff;
+            position: absolute;
+            margin-top: -1px;
+            border: 1px solid #333;
+            z-index: 20000;
+            display: none;
+        }
+        #divselsct ul li {
+            height: 24px;
+            line-height: 24px;
+        }
+        #divselect ul li a {
+            height: 24px;
+            color: #333;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="divselect">
+        <cite>请分类选择</cite>
+        <ul>
+            <li id="li"><a href="javascript:;" selecteid="1">ASP开发</a></li>
+            <li><a href="javascript:;" selecteid="2">.NET开发</a></li>
+            <li><a href="javascript:;" selecteid="3">PHP开发</a></li>
+            <li><a href="javascript:;" selecteid="4">javascript开发</a></li>
+            <li><a href="javascript:;" selecteid="5">Java特效</a></li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        window.onload = function () {
+            var box = document.getElementById('divselect'),
+                title = box.getElementsByTagName('cite')[0],
+                menu = box.getElementsByTagName('ul')[0],
+                as = box.getElementsByTagName('a'),
+                index = -1;
+                //console.log(as[0].innerHTML);
+            //点出三角时
+            title.onclick = function (event) {
+                menu.style.display = 'block';
+
+                event = event || window.event;
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                } else {
+                    event.cancelBubble = true;
+                }
+            };
+
+            document.onkeyup = function (event) {
+                event = event || window.event;
+                // console.log(event.keyCode);
+                var keycode = event.keyCode;
+                if (keycode === 40) {
+                    if (index < as.length) {
+                        index++;                                              
+                    } else {
+                        index = 0;
+                    }
+                } else if(keycode === 38) {
+                    if (index <= 0) {
+                        index = as.length;
+                    } else {
+                        index--;
+                    }
+                } else if (keycode === 13) {
+                    title.innerHTML = as[index].innerHTML;
+                    as[index].style.background = '#fff';
+                    index = -1;
+                    menu.style.display = 'none';
+                }
+
+                for(var i=0, len=as.length; i<len; i++) {
+                    if(i === index) {
+                        as[i].style.background = '#666';
+                    } else {
+                        as[i].style.background = '#fff';
+                    }
+                }
+            };
+
+            function mouseWork() {
+                for (var i = 0, len = as.length; i < len; i++) {
+                    as[i].onmouseover = function () {
+                        this.style.background = '#666';
+                    };
+                    as[i].onmouseout = function () {
+                        this.style.background = '#fff';
+                    };
+                    as[i].onclick = function () {
+                        title.innerHTML = this.innerHTML;
+                    };
+                }
+            }
+            mouseWork();
+            document.onclick = function () {
+                menu.style.display = 'none';
+            };
+        };
+    </script>
+</body>
+</html>
