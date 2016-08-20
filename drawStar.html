@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DrawStar</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #ccc; display: block; margin: 20px auto;">
+        当前浏览器不支持Canvas，请更换浏览器后再试
+    </canvas>
+
+    <script type="text/javascript">
+        window.onload = function() {
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+
+            canvas.width = 1000;
+            canvas.height = 680;
+
+            //实现从上到下的渐变
+            var skyStyle = context.createLinearGradient(0, 0, 0, canvas.height);
+            skyStyle.addColorStop(0.0, "#111");
+            skyStyle.addColorStop(1.0, "#035");
+            context.fillStyle = skyStyle;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            //画出天空中随机公布的小星星
+            for(var i=0; i<120; i++) {
+                var posx = Math.random()*canvas.width;
+                var posy = Math.random()*canvas.height * 0.65;
+                var radius = Math.random()*5 + 5;
+                var angle = Math.random()*360;
+
+                //检测小星星是否超出了画布的范围，如果是，则将其移至画布内
+                if(posx+radius > canvas.width) {
+                    posx = canvas.width -radius;
+                }else if (posx-radius < 0) {
+                    posx = radius;
+                }
+                if(posy+radius > canvas.height) {
+                    posy = canvas.height -radius;
+                }else if (posy-radius < 0) {
+                    posy = radius;
+                }
+                drawStar(posx, posy, radius, radius/2, angle, context);
+            }
+            
+        };
+
+        function drawStar(x, y, r, R, rot, cxt) {
+            cxt.beginPath();
+            for(var i=0; i<5; i++) {                
+                cxt.lineTo(Math.cos( (18 + 72*i - rot)/180*Math.PI )*R + x, 
+                           -Math.sin( (18 + 72*i - rot)/180*Math.PI )*R + y);
+                cxt.lineTo(Math.cos( (54 + 72*i - rot)/180*Math.PI )*r + x, 
+                           -Math.sin( (54 + 72*i - rot)/180*Math.PI )*r + y);                
+               
+            }
+            cxt.closePath();
+            cxt.width = 3;
+            cxt.fillStyle = "#ef0";
+            cxt.strokeStyle = "#ee0";
+            cxt.fill();
+            cxt.stroke();
+        }
+    </script>
+</body>
+</html>
